@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration.Annotations;
 using AutoMapper.QueryableExtensions;
 using BookStoreApp.API.Data;
 using BookStoreApp.API.Models.Book;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +41,7 @@ public class BooksController(BookStoreDbContext db, ILogger<BooksController> log
         return Ok(book);
     }
     
-    [HttpPost]
+    [HttpPost, Authorize(Roles = "Administrator")]
     public async Task<ActionResult<BookReadOnlyDto>> CreateBook(BookCreateDto bookDto)
     {
         var book = mapper.Map<Book>(bookDto);
@@ -51,7 +51,7 @@ public class BooksController(BookStoreDbContext db, ILogger<BooksController> log
         return CreatedAtAction(nameof(GetBook), new { id = createdBookDto.Id }, createdBookDto);
     }
     
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:int}"), Authorize(Roles = "Administrator")]
     public async Task<IActionResult> UpdateBook(int id, BookUpdateDto bookDto)
     {
         var book = await db.Books.FindAsync(id);
@@ -65,7 +65,7 @@ public class BooksController(BookStoreDbContext db, ILogger<BooksController> log
         return NoContent();
     }
     
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:int}"), Authorize(Roles = "Administrator")]
     public async Task<IActionResult> DeleteBook(int id)
     {
         var book = await db.Books.FindAsync(id);

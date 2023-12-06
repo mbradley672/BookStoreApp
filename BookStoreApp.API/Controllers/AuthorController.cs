@@ -2,6 +2,7 @@
 using BookStoreApp.API.Data;
 using BookStoreApp.API.Models.Author;
 using BookStoreApp.API.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +21,7 @@ public class AuthorController(IAuthorRepository authorRepository, IMapper mapper
         return Ok(mapper.Map<ICollection<AuthorReadOnlyDto>>(await authorRepository.GetAll()));
     }
 
-    [HttpPost]
+    [HttpPost, Authorize(Roles = "Administrator")]
     public async Task<IActionResult> CreateAuthor(AuthorCreateDto dto)
     {
         var author = mapper.Map<Author>(dto);
@@ -34,7 +35,7 @@ public class AuthorController(IAuthorRepository authorRepository, IMapper mapper
         return BadRequest();
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:int}"), Authorize(Roles = "Administrator")]
     public async Task<IActionResult> UpdateAuthor(int id, AuthorUpdateDto authorDto)
     {
         try
@@ -65,7 +66,7 @@ public class AuthorController(IAuthorRepository authorRepository, IMapper mapper
         }
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:int}"), Authorize(Roles = "Administrator")]
     public async Task<IActionResult> DeleteAuthor(int id)
     {
         var existingAuthor = await authorRepository.GetSingleOrDefault(a => a.Id == id);

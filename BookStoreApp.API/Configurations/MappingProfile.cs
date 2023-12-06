@@ -2,6 +2,7 @@
 using BookStoreApp.API.Data;
 using BookStoreApp.API.Models.Author;
 using BookStoreApp.API.Models.Book;
+using BookStoreApp.API.Models.User;
 
 namespace BookStoreApp.API.Configurations;
 
@@ -24,7 +25,14 @@ public class MappingProfile : Profile
                 opt.Condition((src, dest, srcMember) => srcMember != null));
         CreateMap<BookCreateDto, Book>().ReverseMap();
         CreateMap<BookUpdateDto, Book>().ReverseMap();
-        
 
+        CreateMap<UserRegisterDto, ApplicationUser>()
+            .ForMember(x => x.UserName, 
+                opt => opt.MapFrom(src => src.Email))
+            .ForMember(x=>x.NormalizedEmail, opt => 
+                opt.MapFrom(src=> src.Email!.ToUpper()))
+            .ForMember(x => x.NormalizedUserName, opt =>
+                opt.MapFrom(src => src.Email!.ToUpper()))
+            .ReverseMap();
     }
 }
