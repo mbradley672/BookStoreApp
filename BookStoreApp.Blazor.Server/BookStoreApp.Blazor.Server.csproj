@@ -6,4 +6,22 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Components\Pages\Users\Login.razor.bak" />
+    <None Remove="Components\Pages\Users\Register.razor.bak" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Components\Pages\Users\Login.razor.bak" />
+    <Content Include="Components\Pages\Users\Register.razor.bak" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\Base\" />
+  </ItemGroup>
+
 </Project>

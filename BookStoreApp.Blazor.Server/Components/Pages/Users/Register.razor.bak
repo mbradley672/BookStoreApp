@@ -1,0 +1,68 @@
+﻿@* @page "/users/register" *@
+@inject IBookStoreServiceClient httpClient
+@inject NavigationManager NavigationManager
+@using BookStoreApp.Blazor.Server.Services.Base
+
+<h3 class="ms-3 mb-2 ps-2">Register New Account</h3>
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-danger">
+        <p>@message</p>
+    </div>
+}
+<div class="card-body rounded rounded-4 border border-2" style="max-width: calc(100%/2);">
+    <EditForm Model="RegistrationModel" OnValidSubmit="HandleRegisterUser">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-row">
+            <div class="form-floating col-md-6 mb-2">
+                    <label for="inputEmail4">Email</label>
+                    <InputText @bind-Value="RegistrationModel.UserName" type="email" class="form-control" id="inputEmail4" placeholder="Email" />
+                    <ValidationMessage For="() => RegistrationModel.Email" />
+            </div>
+            <div class="form-floating col-md-6 mb-2">
+                    <label for="inputPassword4">Password</label>
+                    <InputText @bind-Value="RegistrationModel.Email" type="password" class="form-control" id="inputPassword4" placeholder="Password" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <div class="form-floating">
+                    <label for="inputfname">First Name</label>
+                    <InputText @bind-Value="RegistrationModel.FirstName" type="email" class="form-control" id="inputfname" placeholder="First Name" />
+                    <ValidationMessage For="() => RegistrationModel.Email" />
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <div class="form-floating">
+                    <label for="inputlname">Last Name</label>
+                    <InputText @bind-Value="RegistrationModel.LastName" type="password" class="form-control" id="inputlname" placeholder="Last Name" />
+                </div>
+            </div>
+        </div> 
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </EditForm>
+</div>
+
+
+@code {
+    UserRegisterDto RegistrationModel = new UserRegisterDto();
+    string message = string.Empty;
+    private async Task HandleRegisterUser()
+    {
+        RegistrationModel.Role = "User";
+        try
+        {
+            await httpClient.RegisterAsync(RegistrationModel);
+            NavigationManager.NavigateTo("/users/login");
+        }
+        catch (ApiException e)
+        {
+            message = e.Message;
+            Console.WriteLine(e);
+            throw;
+        }
+        
+    }
+
+}

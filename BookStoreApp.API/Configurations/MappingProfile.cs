@@ -27,12 +27,12 @@ public class MappingProfile : Profile
         CreateMap<BookUpdateDto, Book>().ReverseMap();
 
         CreateMap<UserRegisterDto, ApplicationUser>()
-            .ForMember(x => x.UserName, 
-                opt => opt.MapFrom(src => src.Email))
+            .ForMember(x => x.Email, 
+                opt => opt.MapFrom(src => src.UserName))
             .ForMember(x=>x.NormalizedEmail, opt => 
-                opt.MapFrom(src=> src.Email!.ToUpper()))
+                opt.MapFrom(src=> src.UserName!.ToUpper()))
             .ForMember(x => x.NormalizedUserName, opt =>
-                opt.MapFrom(src => src.Email!.ToUpper()))
+                opt.MapFrom(src => src.UserName!.ToUpper()))
             .ReverseMap();
     }
 }

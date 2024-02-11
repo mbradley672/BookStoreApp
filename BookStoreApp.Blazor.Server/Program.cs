@@ -1,10 +1,13 @@
 using BookStoreApp.Blazor.Server.Components;
+using BookStoreApp.Blazor.Server.Services.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddHttpClient<IBookStoreServiceClient, BookStoreServiceClient>(cl => cl.BaseAddress = new Uri("https://localhost:44330"));
 
 var app = builder.Build();
 
